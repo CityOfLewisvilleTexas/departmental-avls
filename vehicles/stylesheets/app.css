@@ -1,0 +1,633 @@
+#leftSide, #rightSide, #extraPanel {
+	padding: 0;
+}
+#list .panel-group, #vehicleList .panel-group {
+	margin-bottom: 0;
+}
+
+#extraPanel .panel-body {
+	padding: 0;
+}
+#extraPanel .list-group-item {
+	padding: 0px 5px;
+}
+#extraPanel .list-group-item:first-child{
+	border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+#extraPanel .list-group-item .list-group-item-heading{
+	margin-top: 5px;
+}
+#extraPanel .list-group-item .list-group-item-text{
+	margin: 5px 10px;
+}
+
+#extraPanel {
+	height: calc(100vh - 51px);
+	overflow-y: auto;
+	border-left: 2px solid #4d1e76;
+}
+#narrativeFeed {
+	height: 150px;
+	overflow-y: auto;
+	border-top: 2px solid #4d1e76;
+}
+#fireAlertDiv {
+	height: 150px;
+	overflow-y: auto;
+}
+#fireAlertDiv .list-group{
+	margin-bottom: 0;
+}
+
+#map {
+	height: 100%;
+	width: 100%;
+}
+
+/*a {
+	cursor: pointer;
+}*/
+#narrativeFeed tr, #layersList td.layerCell, #vehicleList a {
+	cursor: pointer;
+}
+#narrativeFeed tr:first-child > td{
+	border-top: 0px;
+}
+
+.nav-city-logo, .loading-logo{
+	height: 50px !important;
+}
+/* Remove bullet from badge (right, in collapse) */
+.navbar-header{
+	list-style: none;
+}
+.navbar-default .navbar-nav > li > button {
+	margin: 0px;
+	border: 0;
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+.navBtn{
+	padding-top: 8px !important;
+}
+
+.navbar-default .navbar-header > span > li > button {
+	margin: 0px;
+	border: 0;
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+/* apply bootstrap style to dropdown in header (brand) */
+.navbar-header > span > li > .dropdown-menu {
+	margin-top: 0 !important;
+	border-top-left-radius: 0 !important;
+	border-top-right-radius: 0 !important;
+}
+
+.navbar-right{
+	padding: 10px 15px;
+	margin-top: 10px;
+	margin-right: -15px;
+	margin-bottom: 10px;
+	margin-left: -15px;
+	border-top: 1px solid transparent;
+	border-bottom: 1px solid transparent;
+	-webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, .1), 0 1px 0 rgba(255, 255, 255, .1);
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, .1), 0 1px 0 rgba(255, 255, 255, .1);
+}
+.has-feedback .form-control{
+	padding-right: 10px;
+}
+
+.brand-ul {
+	list-style: none;
+	float: none!important;
+    margin-top: 7.5px;
+}
+.brand-ul > li {
+	float: left;
+	position: relative;
+	display: block;
+}
+
+
+.table{
+	margin-bottom: 0px;
+}
+
+.gly-spin {
+	-webkit-animation: spin 2s infinite linear;
+	-moz-animation: spin 2s infinite linear;
+	-o-animation: spin 2s infinite linear;
+	animation: spin 2s infinite linear;
+}
+td.legendCell {
+	padding-top: 4px !important;
+	padding-bottom: 4px !important;
+}
+.legendTitle{
+	margin-left: 4px;
+	margin-right: 4px;
+}
+.legendTitle > button{
+	margin-right: 4px;
+}
+
+.labelI{
+	font-style: italic !important;
+}
+
+/* panel.vue, so transition will occur on first open (prior to knowing narrative space needed) */
+.collapse-transition {
+	transition: max-height .5s ease;
+	overflow: hidden;
+	max-height: 9999px;
+}
+.navbar-collapse {
+  max-height: none !important; 
+}
+
+/* Map controls */
+.controlUI{
+	background-color: rgb(255,255,255);
+	border-radius: 2px;
+	box-shadow: rgba(0,0,0,0.298039) 0px 1px 4px -1px;
+	cursor: pointer;
+	margin: 10px;
+	text-align: center;
+}
+.controlUI:hover{
+	background-color: rgb(235,235,235);
+}
+.controlText{
+	color: rgb(25,25,25);
+	font-family: Roboto, Arial, sans-serif;
+	font-size: 11px;
+	padding: 8px;
+}
+.controlBold{
+	font-weight: 500;
+}
+
+/* Apply coloring for purple navbar */
+.navbar-default {
+	background-color: #5d2490;
+	border-color: #4d1e76;
+}
+.navbar-default .navbar-brand,
+.navbar-default a.navbar-brand:focus,
+.navbar-default .navbar-text,
+.navbar-default .navbar-nav > li > a {
+	color: #fff;
+}
+.navbar-default a.navbar-brand:hover {
+	color: #fff;
+	cursor: help;
+}
+
+.navbar-default .navbar-nav > li > a  > .glyphicon-plus,
+.navbar-default .navbar-nav > li > a  > .glyphicon-resize-full,
+.navbar-default .navbar-nav > li > a.closeAll  > .glyphicon-remove {
+	color: #80CC28;
+}
+.navbar-default .navbar-nav > li > a  > .glyphicon-remove,
+.navbar-default .navbar-nav > li > a  > .glyphicon-resize-small {
+	color: #fff;
+}
+
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus{
+	color: #80CC28;
+	background-color: transparent;
+}
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > button,
+.navbar-default .navbar-header > span > .open > button {
+	color: #80CC28;
+	background-color: #4d1e76;
+}
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus,
+.navbar-default .navbar-nav > .open > a:hover,
+.navbar-default .navbar-nav > .open > a:focus {
+	color: #fff;
+	background-color: #4d1e76;
+}
+.navbar-default .btn-group .btn-default {
+	color: #fff;
+	background-color: #5d2490;
+	border-color: #4d1e76;
+}
+.navbar-default .btn-group .btn-default.active {
+	color: #80CC28;
+	background-color: #552183;
+}
+.navbar-default .btn-group .btn-default:focus,
+.navbar-default .btn-group .btn-default:hover {
+	color: #80CC28;
+	background-color: #552183;
+	border-color: #4d1e76;
+}
+/* change toggle color */
+.navbar-default .navbar-toggle {
+	border-color: #4d1e76;
+}
+.navbar-default .navbar-toggle:hover,
+.navbar-default .navbar-toggle:focus {
+	background-color: #4d1e76;
+}
+.navbar-default .navbar-toggle .icon-bar {
+	background-color: #fff;
+}
+.navbar-default .navbar-collapse {
+	border-color: #4d1e76;
+}
+/* change badge color for narrative notification */
+.navbar-default .navbar-nav > li > .btn-link > .badge,
+.navbar-default .navbar-header > span > li > .btn-link > .badge{
+	color: #5d2490;
+	background-color: #fff;
+}
+.navbar-default .navbar-nav > li > .btn-link:hover > .badge,
+.navbar-default .navbar-header > span > li > .btn-link:hover > .badge,
+.navbar-default .navbar-nav > .open > .btn-link > .badge,
+.navbar-default .navbar-header > span > .open > .btn-link > .badge{
+	background-color: #80CC28;
+}
+/* Change colors for dropdown in navbar */
+.navbar-default .dropdown-menu {
+	background-color: #4d1e76;
+}
+.navbar-default  .dropdown-menu > li > a {
+	color: #fff;
+}
+.navbar-default  .dropdown-menu > li > a > .badge {
+	color: #4d1e76;
+	background-color: #fff;
+}
+.navbar-default li.stationNotification .dropdown-menu > li > a > .badge{
+	color: #fff;
+	background-color: #a94442;
+}
+.navbar-default  .dropdown-header{
+	color: #fff;
+}
+.navbar-default  .dropdown-menu .divider {
+	background-color: #fff;
+}
+.navbar-default .dropdown-menu > li > a:hover,
+.navbar-default .dropdown-menu > li > a:focus {
+	color: #80CC28;
+	background-color: transparent;
+}
+.navbar-default li.stationNotification .dropdown-menu > li > a:hover,
+.navbar-default li.stationNotification .dropdown-menu > li > a:focus {
+	color: #a94442;
+}
+.navbar-default .dropdown-menu > li > a:hover > .badge,
+.navbar-default .dropdown-menu > li > a:focus > .badge {
+	background-color: #80CC28;
+}
+.navbar-default .dropdown-menu > .active > a {
+	color: #80CC28;
+	background-color: transparent;
+}
+.navbar-default .dropdown-menu > .active > a:focus,
+.navbar-default .dropdown-menu > .active > a:hover {
+	color: #fff;
+	background-color: transparent;
+}
+.navbar-default .dropdown-menu > .li-group.active > a:focus,
+.navbar-default .dropdown-menu > .li-group.active > a:hover {
+	color: #80CC28;
+	/*cursor: not-allowed;*/
+}
+
+/* Apply coloring for new narrative notes */
+.table-striped > tbody > tr.success:nth-of-type(odd) > td{
+	background-color: #d8eccf;
+}
+.table-hover > tbody > tr.success:nth-of-type(odd):hover > td{
+	background-color: #d0e9c6;
+}
+.table > tbody > tr.success > td {
+	border-color: #b6dda7;
+}
+#fireAlertDiv{
+	background-color: #FFF;
+	border-bottom: 2px solid #4d1e76;
+}
+#fireAlertDiv .badge{
+	font-size: 65%;
+	margin-left: 7px;
+	margin-right: 7px;
+	color: #a94442;
+	background-color: #f2dede;
+}
+#fireAlertDiv .list-group-item-danger{
+	background-color: #a94442 !important;
+	color: #f2dede !important;
+}
+
+.panel-success > .panel-heading .label{
+	color: #dff0d8;
+	background-color: #3c763d;
+}
+
+.panel > .panel-heading .stationBadge,
+.panel-success > .panel-heading .stationBadge{
+	background-color: #a94442;
+}
+
+/* set map and list height at side by side height */
+@media only screen and (min-width:992px){
+	#leftSide, #mapDiv{
+		height: calc(100vh - 51px);
+	}
+	.fireAlert #mapDiv{
+		height: calc(100vh - 201px);
+	}
+	.narrative #mapDiv {
+		height: calc(100vh - 201px);
+	}
+	.fireAlert.narrative #mapDiv {
+		height: calc(100vh - 351px);
+	}
+	#rightSide {
+		height: calc(100vh - 51px);
+		overflow-y: auto;
+		border-left: 2px solid #4d1e76;
+	}
+	.hide-out-collapse{
+		display:none !important;
+	}
+	/*.navbar-right label{
+		padding-top: 10px !important;
+	}*/
+	div.pac-container{
+		z-index: 1031;
+	}
+	/* positions autocomplete for place input below navbar */
+	div.pac-container.pac-logo {
+		top: 40px !important;
+	}
+	
+	.navbar-right{
+		float: right !important;
+		margin-right: -15px;
+		width: auto;
+		padding-top: 0;
+		padding-bottom: 0;
+		margin-left: 0;
+		border: 0;
+		-webkit-box-shadow: none;
+			box-shadow: none;
+	}
+	
+	.navbar-right .form-group {
+		display: inline-block;
+		margin-bottom: 0;
+		vertical-align: middle;
+	}
+	.navbar-right .form-control {
+		display: inline-block;
+		width: 250px;
+		vertical-align: middle;
+	}
+}
+
+/* set list height at stacked height */
+@media only screen and (max-width:991px){
+	#leftSide, #mapDiv{
+		height: calc(50vh - 25.5px);
+	}
+	#rightSide{
+		height: calc(50vh - 25.5px);
+		overflow-y: auto;
+		border-top: 2px solid #4d1e76;
+	}
+	
+	.landscape #leftSide, .landscape #mapDiv, .landscape #rightSide{
+		height: calc(100vh - 51px);
+	}
+	.landscape #rightSide{
+		border-left: 2px solid #4d1e76;
+		border-top: none;
+	}
+	.landscape #rightSide.fullScreen{
+		border-left: none;
+	}
+	
+	.narrative #leftSide {
+		height: calc(50vh + 49.5px);
+	}
+	.narrative #rightSide{
+		height: calc(50vh - 100.5px);
+	}
+	.narrative #mapDiv{
+		height: calc(50vh - 100.5px);
+	}
+	
+	.narrative.landscape #leftSide, .narrative.landscape #rightSide{
+		height: calc(100vh - 51px);
+	}
+	.narrative.landscape #mapDiv{
+		height: calc(100vh - 201px);
+	}
+	
+	#leftSide.fullScreen, #leftSide.fullScreen #mapDiv{
+		height: calc(100vh - 51px);
+	}
+	#rightSide.fullScreen{
+		height: calc(100vh - 51px);
+		border-top: none;
+	}
+	
+	.narrative #leftSide.fullScreen #mapDiv, .narrative #rightSide.fullScreen{
+		height: calc(100vh - 201px);
+	}
+	.narrative #rightSide.fullScreen{
+		/*border-top: 2px solid #4d1e76;*/
+	}
+	
+	.fullRight #leftSide{
+		display: none;
+	}
+	.narrative.fullRight #leftSide {
+		display: block;
+		height: 150px;
+	}
+	.narrative.fullRight #narrativeFeed {
+		border-top: none;
+	}
+	.narrative.fullRight #narrativeFeed{
+		border-bottom: 2px solid #4d1e76;
+	}
+	
+	.hide-in-collapse{
+		display:none !important;
+	}
+	
+	div.pac-container{
+		z-index: 2000;
+	}
+	
+	/* change breakpoint for navbar collapse */
+	.navbar-header {
+		float: none;
+	}
+	.navbar-collapse {
+		border-top: 1px solid transparent;
+		-webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, .1);
+			box-shadow: inset 0 1px 0 rgba(255, 255, 255, .1);
+	}
+	.navbar-collapse.collapse {
+		display: none!important;
+	}
+	.navbar-collapse.in{
+		overflow-y: auto;
+		/*display:block !important;*/
+	}
+	.navbar-fixed-top .navbar-collapse {
+		padding-right: 15px;
+		padding-left: 15px;
+	}
+	/* Cancel margin for small collapse */
+	.container-fluid > .navbar-collapse,
+	.container-fluid > .navbar-header {
+		margin-right: -15px;
+		margin-left: -15px;
+	}
+	.navbar-fixed-top {
+		top: 0;
+		border-width: 0 0 1px;
+	}
+	.navbar-toggle {
+		display: block;
+	}
+	
+	/* Change dropdown for small collapse */
+	.navbar-nav .open .dropdown-menu {
+		position: static;
+		float: none;
+		width: auto;
+		margin-top: 0;
+		background-color: #4d1e76;
+		border: 0;
+		-webkit-box-shadow: none;
+			box-shadow: none;
+	}
+	.navbar-nav .open .dropdown-menu > li > a,
+	.navbar-nav .open .dropdown-menu .dropdown-header {
+		padding: 5px 15px 5px 25px;
+	}
+	.navbar-nav .open .dropdown-menu > li > a {
+		line-height: 20px;
+	}
+	.navbar-nav .open .dropdown-menu > li > a:hover,
+	.navbar-nav .open .dropdown-menu > li > a:focus {
+		background-image: none;
+	}
+	
+	.navbar-nav {
+		float: none!important;
+		margin: 7.5px -15px;
+	}
+	.navbar-nav > li {
+		float: none;
+	}
+	.navbar-nav > li > a {
+		line-height: 20px;
+		padding-top: 10px;
+		padding-bottom: 10px;
+	}
+	.navbar-right {
+		float: none !important;
+		margin: 0px -15px;
+	}
+	
+	/* Change form-group for small collapse */
+	.navbar-right .form-group {
+		margin-bottom: 5px;
+	}
+	.navbar-right .form-group:last-child {
+		margin-bottom: 0;
+	}
+}
+
+
+/* tablet */
+
+@media only screen and (max-width:991px) and (min-width:768px){
+	/* positions autocomplete for place input below navbar */
+	div.pac-container.pac-logo {
+		top: 308px !important;
+	}
+	div.addClose ~ div.pac-container.pac-logo {
+		top: 348px !important;
+	}
+}
+
+/* phone */
+@media only screen and (max-width:767px){
+	/* positions autocomplete for place input below navbar */
+	div.pac-container.pac-logo {
+		top: 228px !important;
+	}
+	div.addClose ~ div.pac-container.pac-logo {
+		top: 268px !important;
+	}
+	/* placeInput is hidden on xs, have to hide the outer ul also */
+	.navbar-right{
+		display:none;
+	}
+	.narrative.landscape #narrativeFeed{
+		height: 100px;
+	}
+	.narrative.landscape.fullRight #leftSide{
+		height: 100px;
+	}
+	.narrative.landscape #mapDiv{
+		height: calc(100vh - 151px) !important;
+	}
+	.narrative.landscape #rightSide.fullScreen{
+		height: calc(100vh - 151px) !important;
+	}
+	/* Change coloring for min drop down */
+	.navbar-default .navbar-nav .open .dropdown-menu > li > a {
+		color: #fff;
+	}
+	.navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
+	.navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+		color: #80CC28;
+		background-color: transparent;
+	}
+	.navbar-default .navbar-nav .open .dropdown-menu > .active > a {
+		color: #80CC28;
+		background-color: transparent;
+	}
+	.navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus,
+	.navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover {
+		color: #fff;
+		background-color: transparent;
+	}
+	.navbar-default .navbar-nav .open .dropdown-menu > .li-group.active > a:focus,
+	.navbar-default .navbar-nav .open .dropdown-menu > .li-group.active > a:hover {
+		color: #80CC28;
+		/*cursor: not-allowed;*/
+	}
+}
+@media only screen and (max-width:334px){
+	/* On very small screens, make btn-group btn-group-sm */
+	.btn-group-med > .btn{
+		padding: 5px 10px;
+		font-size: 12px;
+		line-height: 1.5;
+		border-radius: 3px;
+	}
+	.navBtn{
+		padding-top: 10px !important;
+	}
+}

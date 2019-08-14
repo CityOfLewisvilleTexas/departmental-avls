@@ -1,0 +1,179 @@
+html, body{
+	margin: 0;
+	height: 100%;
+}
+
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+
+/* minimize the margin at the bottom of the navbar */
+.navbar{
+	margin-bottom: 8px;
+	border-radius: 0;
+}
+
+/* For some reason this is requires for the button to follow the navbar's 15px margin */
+#autorefreshBtn {
+	margin-right: 0px;
+}
+
+/* add bottom margin to button group
+#showGroup{
+	margin-bottom: 8px;
+}*/
+
+/* add bottom margin to map */
+#map{
+	margin-bottom: 5px;
+	padding-left: 0px;
+	padding-right: 0px;
+}
+
+iframe{
+	margin-left: 5px;
+}
+
+/* add bottom margin to list
+   minimize padding */
+#list{
+	overflow-y: auto;
+	overflow-x: hidden;
+	margin-bottom: 5px;
+	padding-left: 5px;
+	padding-right: 3px;
+}
+
+/* delete the margin at the bottom of the accordion */
+.panel-group {
+	margin-bottom: 0px;
+}
+
+/* Change cursor to pointer for entire panel title (not just text) */
+.panel-title {
+	cursor: pointer;
+}
+
+.panel-body {
+	padding-bottom: 10px;
+}
+
+/* add top and bottom margins and borders to key rows */
+.keyRow{
+	margin-top: 2px;
+	margin-bottom: 2px;
+}
+
+.keyRow:first-of-type{
+	margin-top: 0px;
+}
+
+.keyRow:last-child{
+	margin-bottom: 0px;
+}
+
+/* set map and list height at side by side height */
+@media only screen and (min-width:992px){
+	#showGroup{
+		display: none;
+	}
+	#map{
+		height: calc(100vh - 65px);
+	}
+	iframe{
+		height: calc(100vh - 65px);
+		width: calc(66.67vw - 10px);
+	}
+	#list{
+		height: calc(100vh - 65px);
+	}
+}
+/* set list height at side by side height */
+@media only screen and (max-width:991px){
+	#map{
+		height: calc(50vh - 35px);
+	}
+	iframe{
+		height: calc(50vh - 35px);
+		width: calc(100vw - 10px);
+	}
+	#list{
+		height: calc(50vh - 35px);
+	}
+	#map.fullScreen{
+		height: calc(100vh - 65px);
+	}
+	#map.fullScreen iframe {
+		height: calc(100vh - 65px);
+	}
+	#list.fullScreen{
+		height: calc(100vh - 65px);
+	}
+}
+
+/* hide "Date" to shorten row title at certain sizes */
+/* hide spans to shorten panel title at certain sizes*/
+@media (max-width:1596px) and (min-width:1445px){
+	.rowTitle .date{
+		display: none;
+	}
+}
+@media (min-width:1486px){
+	.smallTitleShow{
+		display:none;
+	}
+}
+@media (max-width: 1485px) and (min-width:1200px){
+	.smallTitleHide{
+		display: none;
+	}
+}
+@media (max-width:1383px) and (min-width:1200px){
+	.rowTitle .date{
+		display: none;
+	}
+	.hideSmall {
+		display: none;
+	}
+}
+@media (max-width: 1199px) and (min-width:1151px){
+	.smallTitleShow{
+		display:none;
+	}
+}
+@media (max-width: 1150px) and (min-width:992px){
+	.smallTitleHide{
+		display: none;
+	}
+}
+
+@media (max-width:1110px) and (min-width:992px){
+	.rowTitle .date{
+		display: none;
+	}
+	.hideSmall {
+		display: none;
+	}
+}
+/* use a smaller font size for row title at a certain size */
+@media (max-width:1444px) and (min-width:992px){
+	.rowTitle{
+		font-size: smaller;
+	}
+}
+@media (max-width:991px) and (min-width:481px){
+	.smallTitleShow{
+		display:none;
+	}
+}
+@media only screen and (max-width:480px){
+	.smallTitleHide{
+		display:none;
+	}
+}
+@media only screen and (max-width:399px){
+	.rowTitle .date{
+		display:none;
+	}
+	.hideSmall{
+		display:none;
+	}
+}

@@ -1,0 +1,47 @@
+﻿<uib-accordion close-others="true">
+    <uib-accordion-group ng-repeat="call in allCalls | filter: {'_PanelClass': 'default'} | orderBy:orderByFunction" panel-class="panel-{{ call._PanelClass }}" id="{{call._ID}}">
+        <uib-accordion-heading>
+            <div ng-click="updateMap(call._FindID)">
+                <span ng-bind-html="call._PanelTitle1 | spanTitleSize"></span>
+                <small class="pull-right">{{ call._PanelTitle2 }}</small>
+                <br>
+                <small ng-bind-html="call._PanelTitle3 | spanHideSmall"></small>
+                <small class="pull-right" ng-bind-html="call._PanelTitle4 | spanHideSmall"></small>
+            </div>
+        </uib-accordion-heading>
+        <div ng-repeat="(key,val) in excludeNullVal(call)" class="row keyRow">
+            <div class="col-xs-4 rowTitle" ng-bind-html="key | replaceKeyName"></div>
+            <div class="col-xs-8 {{ key }}" style="white-space:pre-wrap;">{{ val }}</div>
+        </div>
+    </uib-accordion-group>
+    <uib-accordion-group ng-repeat="call in allCalls | filter: {'_PanelClass': 'success'} | orderBy:orderByFunction" panel-class="panel-{{ call._PanelClass }}" id="{{call._ID}}">
+        <uib-accordion-heading>
+            <div ng-click="updateMap(call._FindID)">
+                <span ng-bind-html="call._PanelTitle1 | spanTitleSize"></span>
+                <small class="pull-right">{{ call._PanelTitle2 }}</small>
+                <br>
+                <small ng-bind-html="call._PanelTitle3 | spanHideSmall"></small>
+                <small class="pull-right" ng-bind-html="call._PanelTitle4 | spanHideSmall"></small>
+            </div>
+        </uib-accordion-heading>
+        <div ng-repeat="(key,val) in excludeNullVal(call)" class="row keyRow">
+            <div class="col-xs-4 rowTitle" ng-bind-html="key | replaceKeyName"></div>
+            <div class="col-xs-8 {{ key }}" style="white-space:pre-wrap;">{{ val }}</div>
+        </div>
+    </uib-accordion-group>
+    <uib-accordion-group ng-repeat="call in allCalls | filter: {'_PanelClass': 'danger'} | orderBy:orderByFunction" panel-class="panel-{{ call._PanelClass }}" id="{{call._ID}}">
+        <uib-accordion-heading>
+            <div ng-click="updateMap(call._FindID)">
+                <span ng-bind-html="call._PanelTitle1 | spanTitleSize"></span>
+                <small class="pull-right">{{ call._PanelTitle2 }}</small>
+                <br>
+                <small ng-bind-html="call._PanelTitle3 | spanHideSmall"></small>
+                <small class="pull-right" ng-bind-html="call._PanelTitle4 | spanHideSmall"></small>
+            </div>
+        </uib-accordion-heading>
+        <div ng-repeat="(key,val) in excludeNullVal(call)" class="row keyRow">
+            <div class="col-xs-4 rowTitle" ng-bind-html="key | replaceKeyName"></div>
+            <div class="col-xs-8 {{ key }}" style="white-space:pre-wrap;">{{ val }}</div>
+        </div>
+    </uib-accordion-group>
+</uib-accordion>
