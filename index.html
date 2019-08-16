@@ -11,6 +11,9 @@
 	
 	<!-- Bootstrap CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<!-- Night modifications for Bootstrap -->
+	<link rel="stylesheet" href="http://avl.cityoflewisville.com/stylesheets/bootstrapNight.css">
+
 
 	<!-- Custom Stylesheet -->
     <link rel="stylesheet" href="app.css?4">
@@ -34,8 +37,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.6.1/lodash.min.js"></script>
 	
 	<!-- Vue Google Map -->
-	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-google-maps/0.1.21/vue-google-maps.js"></script> -->
-	<script src="scripts/vue-google-maps-0.1.21.js"></script>
+	<script src="http://avl.cityoflewisville.com/scripts/vue-google-maps-0.1.21.js?1"></script>
 	
 	<!-- find -->
 	<script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Array.prototype.find,Array.prototype.findIndex"></script>
@@ -46,46 +48,64 @@
 	<!-- vue-router -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/0.7.13/vue-router.min.js"></script>
 	
-	<!-- Socket ? -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.5/socket.io.min.js"></script>
-	
-	<!-- LiveData -->
-	<script src="http://eservices.cityoflewisville.com/livedata/live-data.js"></script>
-	<!--<script src="scripts/live-data.js"></script>-->
-	
-	<script src="components/traffic-control.js"></script>
-	<script src="components/center-control.js"></script>
-	<script src="components/traffic-layer.js"></script>
-	<script src="components/kml-layer.js"></script>
-	<script src="components/map-service-obj.js"></script>
-	<script src="components/tile-cache-obj.js"></script>
+	<script src="http://avl.cityoflewisville.com/components/zoom-control.js"></script>
+	<script src="http://avl.cityoflewisville.com/components/traffic-control.js"></script>
+	<script src="http://avl.cityoflewisville.com/components/night-control.js"></script>
+	<script src="http://avl.cityoflewisville.com/components/center-control.js"></script>
+	<script src="http://avl.cityoflewisville.com/components/traffic-layer.js"></script>
+	<script src="http://avl.cityoflewisville.com/components/kml-layer_32.js"></script>
+	<script src="http://avl.cityoflewisville.com/components/map-service-layer.js"></script>
+	<script src="http://avl.cityoflewisville.com/components/tile-cache-layer.js"></script>
+	<script src="http://avl.cityoflewisville.com/components/wms-layer.js"></script>
+	<script src="http://avl.cityoflewisville.com/components/map-service-layer-dark.js?1"></script>
 	
 </head>
 
 <body>
 
-<div id="app" class="container-fluid">
+<div id="app" class="container-fluid" :class="[{night: nightMode, addClose: showCloseAll}]">
 	<navbar placement="top" type="default">
 		<span slot="brand">
-			<a class="hidden-xs navbar-left"><img class="nav-city-logo" alt="Brand" src="icons/citylogo.svg"/></a>
+			<a class="hidden-xs hidden-md navbar-left"><img class="nav-city-logo" alt="Logo" src="http://avl.cityoflewisville.com/icons/citylogo.svg"/></a>
 			<a class="navbar-brand">
-				<span v-if="(!initial1)"><span class="hidden-xs">Departmental AVL </span><img class="loading-logo" alt="Loading..." src="icons/loading.gif"/></span>
+				<span v-if="(!initial1)"><span class="hidden-xs">Departmental AVL </span></span>
 				<span v-if="(initial1)" class="hidden-xs">{{navTitle1}}</span>
 				<span v-if="(initial1)" class="hidden-sm hidden-md hidden-lg">{{navTitle2}}</span>
 			</a>
-				
-			<!--<li v-bind:class="[{active: showDescription}]"><a v-on:click="showDescription=!(showDescription)">Description</a></li>-->
 			
-				<button-group :value.sync="radioValue" type="default" class="hidden-lg hidden-md btn-group-md navBtn">
-					<radio value="Map">Map</radio>
-					<radio value="Both">Both</radio>
-					<radio value="List">List</radio>
-				</button-group>
+			<button-group :value.sync="radioValue" type="default" class="hidden-lg hidden-md btn-group-med navBtn">
+				<radio value="Map">Map</radio>
+				<radio value="Both">Both</radio>
+				<radio value="List">List</radio>
+			</button-group>
+
+			<a v-if="(!initial1 || !initial2)" class="pull-right hide-out-collapse"><img class="loading-logo" alt="Loading..." src="http://avl.cityoflewisville.com/icons/loading.gif"/></a>
+
 		</span>
-		
+
 		<li><a><span v-if="(initial1)" class="hidden-xs">{{navTitle2}}</span><span v-if="(initial1)" class="hidden-sm hidden-md hidden-lg">{{navTitle1}}<span></a></li>
 		<li><a><span v-if="(initial1)">{{navTitle3}}</span></a></li>
-		<li v-bind:class="[{active: showVehicles}]" class="hidden-xs"><a role="button" v-on:click="showVehicles=!(showVehicles)">Vehicles <span class="small glyphicon" v-bind:class="[{'glyphicon-remove': showVehicles, 'glyphicon-plus': !(showVehicles)}]"></span></a></li>
+		<li v-show="(isMobile && isAndroid)" class="hide-out-collapse" v-bind:class="[{active: mobileFullscreen}]">
+			<a role="button" v-on:click="toggleFullScreen()">Fullscreen<span class="small glyphicon" v-bind:class="[{'glyphicon-resize-full': !(mobileFullscreen), 'glyphicon-resize-small': mobileFullscreen}]"></span></a>
+		</li>
+		<li v-bind:class="[{active: showGIS}]" class="hidden-xs">
+			<a role="button" v-on:click="showGIS=!(showGIS)">GIS Layers <span class="small glyphicon" v-bind:class="[{'glyphicon-remove': showGIS, 'glyphicon-plus': !(showGIS)}]"></span></a>
+		</li>
+		<li v-bind:class="[{active: showVehicles}]" class="hidden-xs">
+			<a role="button" v-on:click="showVehicles=!(showVehicles)">Vehicles <span class="small glyphicon" v-bind:class="[{'glyphicon-remove': showVehicles, 'glyphicon-plus': !(showVehicles)}]"></span></a>
+		</li>
+
+		<dropdown text="Settings">
+			<li class="dropdown-header">Night Mode</li>
+			<li class="li-group" v-bind:class="[{active: setNight == 'OFF'}]"><a v-on:click="setNight='OFF'">OFF <span class="glyphicon glyphicon-ok" v-show="setNight=='OFF'"></span></a></li>
+			<!--<li class="li-group" v-bind:class="[{active: setNight == 'AUTO'}]"><a v-on:click="setNight='AUTO'">AUTO <span class="glyphicon glyphicon-ok" v-show="setNight=='AUTO'"></span></a></li>-->
+			<li class="li-group" v-bind:class="[{active: setNight == 'ON'}]"><a v-on:click="setNight='ON'">ON <span class="glyphicon glyphicon-ok" v-show="setNight=='ON'"></span></a></li>
+		</dropdown>
+
+		<li v-show="showCloseAll"><a role="button" class="closeAll" v-on:click="clickCloseAll">Close All <span class="small glyphicon glyphicon-remove"></span></a></li>
+
+		<a v-if="(!initial1 || !initial2)" class="hide-in-collapse"><img class="loading-logo" alt="Loading..." src="http://avl.cityoflewisville.com/icons/loading.gif"/></a>
+
 		
 		<div class="form-group form-group-sm hidden-xs" slot="right">
 			<place-input v-on:click="resetAutocomplete" class="form-control input-sm" placeholder="Street Address" :select-first-on-enter="true" :component-restrictions.sync="placeInput.restrictions" :place.sync="placeInput.place" :types.sync="placeInput.types" v-ref:gplaceinput>
@@ -93,20 +113,22 @@
 		</div>
 	</navbar>
 	
-	<alert v-bind:show="(!(connected1) || !(connected2))" placement="top" type="danger" width="300px" dismissable>
-		<p v-if="!(connected1)">Connection issues: <span v-if="_Type"></span><span v-else>Inspections</span></p>
-		<p v-if="!(connected2)">Connection issues: Vehicles</p>
+	<alert v-bind:show="!(panelsPolling) || !(vehiclesPolling)" placement="top" type="danger" width="300px" dismissable>
+		<p v-if="!(panelsPolling)">Polling issues: <span v-if="_Type">{{typePanel}}</span><span v-else>Inspections</span></p>
+		<p v-if="!(vehiclesPolling)">Polling issues: Vehicles</p>
 	</alert>
 
 	
 	<div class="row">
-		<div class="col-xs-12" v-bind:class="[{'col-sm-12': !(showVehicles), 'col-sm-9': (showVehicles), 'col-md-10': (showVehicles), 'landscape': isLandscape, 'fullLeft': displayToggle=='List', 'fullRight': displayToggle=='Map'}]">
+		<div class="col-xs-12" v-bind:class="[{'col-sm-12': !(showGIS || showVehicles), 'col-sm-9': (showGIS || showVehicles), 'col-md-10': (showGIS || showVehicles), 'landscape': isLandscape, 'fullLeft': displayToggle=='List', 'fullRight': displayToggle=='Map'}]">
 			<div class="row">
 			
 				<div id="leftSide" class="col-md-6 col-lg-5" v-bind:class="[{
 					'fullScreen': displayToggle=='List', 'col-xs-6': isLandscape && displayToggle == 'Both'}]">
-					
-					<div v-if="initial1" id="listDiv">
+					<div v-if="(!initial1)">
+						<img class="loading-logo center-block" alt="Loading..." src="http://avl.cityoflewisville.com/icons/loading.gif"/>
+					</div>
+					<div id="listDiv">
 						<accordion id="list" one-at-atime="true" v-ref:accordion>
 							<panel v-for="panel in sortedPanels" track-by="_ID" :is-open.sync="panel._isOpen" v-on:click="clickPanelList(panel, $event)" :type="panel._PanelClass" id="{{panel._ID}}">
 								<span slot="header">
@@ -128,12 +150,13 @@
 					
 				</div>
 				
-				<div id="rightSide" class="col-md-6 col-lg-7" v-show="displayToggle != 'List'" v-bind:class="[{
+				<div id="rightSide" class="col-md-6 col-lg-7" v-bind:class="[{
 					'fullScreen': displayToggle=='Map', 'col-xs-6': isLandscape && displayToggle == 'Both'}]">
-					
 					<div id="mapDiv" v-show="displayToggle != 'List'">
-						<map v-if="mapLoaded" :center.sync="centerV" :zoom.sync="zoomV" :bounds.sync="mapBounds" :options="mapOptions" v-on:g-idle="resizeMap" id="map" v-ref:map>
+<!-- UPDATE FOR Google Maps V3.32 - CLarson 8/10/18 remove from map v-on:g-idle="resizeMap"-->
+						<map v-if="mapLoaded" :center.sync="centerV" :zoom.sync="zoomV" :bounds.sync="mapBounds" :options="mapOptions" v-on:g-idle="mapIdling" id="map" v-ref:map>
 							
+							<zoom-control></zoom-control>
 							<traffic-control></traffic-control>
 							<center-control></center-control>
 							
@@ -145,29 +168,21 @@
 								</info-window>
 							</marker>
 							
-							<marker v-for="panel in mappablePanels" track-by="_ID" :position="getLatLng(panel._Lat, panel._Lng)" :clickable.sync="true" :draggable.sync="false" :icon="getPanelIcon(panel._PointLabel, panel._isOpen)" :label="getPanelMarkerLabel(panel._PointLabel)" @g-click="clickPanelMarker(panel, $event)" :z-index.sync="200">
-								<info-window :opened.sync="panel._isOpen" :z-index="200" :position="{lat:0, lng:200}">
-									<b>{{panel._PanelTitle1}}</b>
-									<br>
-									<small>{{panel.Address}}</small>
-								</info-window>
-							</marker>
-							
 							<!-- accounts for up to 200 vehicles -->
 							<marker v-for="vehicle in mappableVehicles" track-by="VehicleID" :position="getLatLng(vehicle.lat, vehicle.lng)" :clickable.sync="true" :draggable.sync="false" :icon="getVehicleIcon(vehicle)" :label="getVehicleLabel(vehicle)" @g-click="clickVehicleMarker(vehicle, $event)" :z-index="getVehicleIndex(vehicle)"> <!--:z-index="getVehicleIndex(vehicle)"-->
 								<info-window class="iwStyle" :opened.sync="vehicle.isOpen" :z-index="getVehicleIndex(vehicle)">
 									<b class="pull-left" style="margin-bottom:10px;">{{vehicle.label}}</b>
 									<table class="table table-condensed">
-										<tr>
+										<tr v-if="vehicle.radio">
 											<td><small>Radio:</small></td><td title="TrackStar ID: {{vehicle.VehicleID}}"><small>{{vehicle.radio}}</small></td>
 										</tr>
-										<tr>
+										<tr v-if="vehicle.VIN">
 											<td><small>VIN:</small></td><td><small>{{vehicle.VIN}}</small></td>
 										</tr>
-										<tr>
+										<tr v-if="vehicle.department">
 											<td><small>Department:</small></td><td><small>{{vehicle.department}}</small></td>
 										</tr>
-										<tr>
+										<tr v-if="vehicle.division">
 											<td><small>Division:</small></td><td><small>{{vehicle.division}}</small></td>
 										</tr>
 										<tr>
@@ -177,36 +192,94 @@
 									
 								</info-window>
 							</marker>
+
+							<!-- accounts for up to 200 panels -->
+							<marker v-for="panel in mappablePanels" track-by="_ID" :position="getLatLng(panel._Lat, panel._Lng)" :clickable.sync="true" :draggable.sync="false" :icon="getPanelIcon(panel._PointLabel, panel._isOpen)" :label="getPanelMarkerLabel(panel._PointLabel)" @g-click="clickPanelMarker(panel, $event)" :z-index="getCallIndex(call)">
+								<info-window :opened.sync="panel._isOpen" :z-index="200" :position="{lat:0, lng:200}">
+									<b>{{panel._PanelTitle1}}</b>
+									<br>
+									<small>{{panel.Address}}</small>
+								</info-window>
+							</marker>
+							
 							
 							<traffic-layer v-if="showTrafficLayer"></traffic-layer>
-							<map-service-obj v-for="lyr in filterLayersByFiletype('mapservice')" :layer.sync="lyr"></map-service-obj>
-							<tile-cache-obj v-for="lyr in filterLayersByFiletype('tilecache')" :layer.sync="lyr"></tile-cache-obj>
+							<kml-layer v-if="mapBoundsSet2" v-for="lyr in filterLayersByFiletype('kml')" :layer.sync="lyr"></kml-layer>
+							<map-service-layer v-if="mapBoundsSet2" v-for="lyr in filterLayersByFiletype('mapservice')" :layer.sync="lyr"></map-service-layer>
+							<tile-cache-layer v-if="mapBoundsSet2" v-for="lyr in filterLayersByFiletype('tilecache')" :layer.sync="lyr"></tile-cache-layer>
+							<!--<wms-layer v-if="mapBoundsSet2" v-for="lyr in filterLayersByFiletype('wms')" :layer.sync="lyr"></wms-layer>-->
+							<map-service-layer-dark v-if="mapBoundsSet2" v-for="lyr in filterDarkLayersByFiletype('mapservice')" :layer.sync="lyr"></map-service-layer-dark>
 						</map>
 					</div>
-					
+
 				</div>
 				
 			</div>
 		</div>
-		<div v-show="showVehicles" class='col-sm-3 col-md-2 hidden-xs' id="extraPanel">
+		<div v-show="showGIS || showVehicles" class='col-sm-3 col-md-2 hidden-xs' id="extraPanel">
+			<div v-show="showGIS" id="layersList">
+				<div v-show="chooseGIS == 'GISLayers'">
+					<accordion>
+						<panel v-for="group in groups" :header="group.name">
+							<span>
+								<table class="table table-condensed table-hover layersTable">
+									<tbody>
+										<tr v-for="lyr in filterLayersByGroup(group.id)">
+											<td v-on:click="layerToggle(lyr)" colspan="{{lyr.legendshow ? '1': '2'}}" class="layerCell"></> <!--v-bind:class="[{'invalidFileType': !(lyr.isValidFileType)}]"-->
+												<small><span class="glyphicon" v-bind:class="[{'glyphicon-plus': !(lyr.active), 'glyphicon-ok': lyr.active}]"></span></small> <!--'glyphicon-ban-circle': !(lyr.isValidFileType)-->
+												{{lyr.label}}
+												<span class="glyphicon glyphicon-refresh gly-spin" v-if="lyr.isloading"></span>
+											</td>
+											<td v-if="lyr.legendshow" class="legendCell">
+												<button class="btn btn-default btn-xs pull-right" v-if="lyr.active == true && lyr.legend" v-on:click="chooseGIS = lyr.label"><span class="glyphicon glyphicon-menu-hamburger"></span></button>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</span>
+						</panel>
+					</accordion>
+					<button class="btn btn-xs btn-danger pull-right reloadGISButton" v-on:click="loadGISLayers()">Reload GIS Layers</button>
+				</div>
+				<div v-show="chooseGIS != 'GISLayers'">
+					<div v-for="lyr in filterLayers_Legend" v-show="chooseGIS == lyr.label">
+						<h4 class="legendTitle"><button class="btn btn-xs btn-default" v-on:click="chooseGIS = 'GISLayers'"><span class="glyphicon glyphicon-remove"></span></button>{{lyr.label}} <small>LEGEND</small></h4>
+						<table class="table">
+							<thead>
+								<tr>
+									<th>Symbol</th>
+									<th>Value</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr v-for="item in lyr.legend">
+									<td><img v-bind:src="'data:' + item.contentType + ';base64,' + item.imageData" v-bind:height="item.height" v-bind:width="item.width"/></td>
+									<td>{{item.label}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+
 			<div v-show="showVehicles" id="vehicleList">
-					<panel header="Vehicles">
-						<span>
-							<a class="list-group-item" v-for="vehicle in data2.Vehicles" v-on:click="clickVehicleList(vehicle, $event)">
-								<h5 class="list-group-item-heading"><strong>{{vehicle.label}}</strong>  <span v-if="!(vehicle.isrecent)" class="glyphicon glyphicon-time"></span></h5>
-								
-									<ul class="list-group-item-text list-unstyled" v-if="vehicle.isOpen">
-										<li v-if="vehicle.radio">Radio: {{vehicle.radio}}</li>
-										<li v-if="vehicle.MakeModel">Make/Model: {{vehicle.MakeModel}}</li>
-										<li v-if="vehicle.VIN">VIN: {{vehicle.VIN}}</li>
-										<li v-if="vehicle.deptid">Department: <span v-if="vehicle.department">{{vehicle.department}} </span>({{vehicle.deptid}})</li>
-										<li v-if="vehicle.divid">Division: <span v-if="vehicle.division">{{vehicle.division}} </span>({{vehicle.divid}})</li>
-										<li v-if="!(vehicle.isrecent)">Last Ping: {{vehicle.latlngtime}}</li>
-										<li>TrackStar ID: {{vehicle.VehicleID}}</li>
-									</ul>
-							</a>
-						</span>
-					</panel>
+				<panel header="Vehicles">
+					<span>
+						<a class="list-group-item" v-for="vehicle in data2.Vehicles" v-on:click="clickVehicleList(vehicle, $event)">
+							<h5 class="list-group-item-heading"><strong>{{vehicle.label}}</strong>  <span v-if="!(vehicle.isrecent)" class="glyphicon glyphicon-time"></span></h5>
+							
+							<ul class="list-group-item-text list-unstyled" v-if="vehicle.isOpen">
+								<li v-if="vehicle.radio">Radio: {{vehicle.radio}}</li>
+								<li v-if="vehicle.MakeModel">Make/Model: {{vehicle.MakeModel}}</li>
+								<li v-if="vehicle.VIN">VIN: {{vehicle.VIN}}</li>
+								<li v-if="vehicle.deptid">Department: <span v-if="vehicle.department">{{vehicle.department}} </span>({{vehicle.deptid}})</li>
+								<li v-if="vehicle.divid">Division: <span v-if="vehicle.division">{{vehicle.division}} </span>({{vehicle.divid}})</li>
+								<li v-if="!(vehicle.isrecent)">Last Ping: {{vehicle.latlngtime}}</li>
+								<li>TrackStar ID: {{vehicle.VehicleID}}</li>
+							</ul>
+						</a>
+					</span>
+				</panel>
 			</div>
 		</div>
 	</div>
@@ -219,29 +292,15 @@
 
 VueGoogleMap.load({
 	key: 'AIzaSyDARduaVDhGG5z3_D54raucZWFABj2PFvE',
-	v: '3',
-	libraries: 'places, drawing',
+	v: '3.32',
+	libraries: 'places,drawing',
 });
-
-//var app = {}
-
-//var router = new VueRouter()
-var myData
-var myData2
-
-var openSocket = function(orgCode){
-	myData = new LiveData({webservice : 'AVLTemplate', OrgGroupCode: orgCode});
-	myData2 = new LiveData({webservice : 'AVLTemplate/Vehicles', OrgGroupCode: orgCode});
-	return;
-}
-
-//router.start(app, '#app');
 
 //document.addEventListener('DOMContentLoaded', function(){
 
 Vue.component('navbar', VueStrap.navbar);
-Vue.component('panel', VueStrap.panel);
 Vue.component('accordion', VueStrap.accordion);
+Vue.component('panel', VueStrap.panel);
 Vue.component('radio', VueStrap.radio);
 Vue.component('button-group', VueStrap.buttonGroup);
 Vue.component('dropdown', VueStrap.dropdown);
@@ -259,30 +318,38 @@ Vue.component('place-input', VueGoogleMap.PlaceInput);
 var app = window.app = new Vue({
 	el: '#app',
 	data: {
-		connected1: true,
-		connected2: true,
+		orgCode: '',
+		panelsPolling: true,
+		panelsPollingSec: 10,
+		vehiclesPolling: true,
+		vehiclesPollingSec: 1,
 		initial1: false,
 		initial2: false,
-		
 		data: {Title: [], Panels: []},
 		data2: {Vehicles:[]},
 		layers: [],
+		layersToggleOrder: [],
+		layersMapTypeOrder: [],
 		countActiveLayers: 0,	// what what this going to be used for?
-		
+
 		/* map variables */
 		centerV: {lat: 33.04874516100256, lng: -96.9571323598633},
 		zoomV: 13,
 		mapBounds: {},	// is this anything
 		centerDefault: {lat: 33.04874516100256, lng: -96.9571323598633},
-		mapOptions: {fullscreenControl: false, streetViewControl: false},
 		
 		countOpenIndex: 1600,
 		
 		/* views */
 		radioValue: 'Both',
+		// GIS layers
+		showGIS: false,
+		chooseGIS: 'GISLayers',
 		showVehicles: false,
 		/* options */
 		showTrafficLayer: false,
+		setNight: 'OFF',
+		nightMode: false,
 		
 		// input
 		placeInputOpen: false,
@@ -296,12 +363,52 @@ var app = window.app = new Vue({
 		
 		/* TRYING TO FIX CENTERING ISSUE */
 		mapLoaded: false,
+		mapBoundsSet: false,
+		mapBoundsSet2: false,
 		centerSW: {lat: 33.009298, lng: -97.036123},
 		centerNE: {lat: 33.071864, lng: -96.893458},
-		
+
+		/*mapstyle*/
+		night: [
+			{elementType: 'geometry', stylers: [{color: '#000000'}]},
+			{elementType: 'labels.text.stroke', stylers: [{color: '#242f3e'}]},
+			{elementType: 'labels.text.fill', stylers: [{color: '#746855'}]},
+			{featureType: 'administrative.locality', elementType: 'labels.text.fill', stylers: [{color: '#d59563'}]},
+			{featureType: 'poi', elementType: 'labels.text.fill', stylers: [{color: '#d59563'}]},
+			{featureType: 'poi.park', elementType: 'geometry', stylers: [{color: '#1a331a'}]},
+			{featureType: 'poi.park', elementType: 'labels.text.fill', stylers: [{color: '#3c763d'}]},
+			{featureType: 'poi.park', elementType: 'labels.text.stroke', stylers: [{visibility: 'off'}]},
+			{featureType: 'road', elementType: 'geometry', stylers: [{color: '#38414e'}]},
+			{featureType: 'road', elementType: 'geometry.stroke', stylers: [{color: '#212a37'}]},
+			{featureType: 'road', elementType: 'labels.text.fill', stylers: [{color: '#9ca5b3'}]},
+			{featureType: 'road.highway', elementType: 'geometry', stylers: [{color: '#746855'}]},
+			{featureType: 'road.highway', elementType: 'geometry.stroke', stylers: [{color: '#1f2835'}]},
+			{featureType: 'road.highway', elementType: 'labels.text.fill', stylers: [{color: '#f3d19c'}]},
+			{featureType: 'transit', elementType: 'geometry', stylers: [{color: '#2f3948'}]},
+			{featureType: 'transit.station', elementType: 'labels.text.fill', stylers: [{color: '#d59563'}]},
+			{featureType: 'water', elementType: 'geometry', stylers: [{color: '#0d1d26'}]},
+			{featureType: 'water', elementType: 'labels.text.fill', stylers: [{color: '#31708f'}]},
+			{featureType: 'water', elementType: 'labels.text.stroke', stylers: [{visibility: 'off'}]}
+		],
 	},
 	
 	watch:{
+		mapBounds: function(newVal, oldVal){
+			if(newVal){
+				this.mapBoundsSet = true;
+				//console.log(newVal.getSouthWest().lng() + ', ' + newVal.getNorthEast().lng());
+			}
+		},
+		mapBoundsSet: function(newVal, oldVal){
+			//console.log("mbs");
+			if(!oldVal && newVal){
+				//console.log('bub');
+				this.mapBoundsSet2 = true;
+			}
+		},
+		mapLoaded: function(newVal, oldVal){
+			//console.log("mapLoaded");
+		},
 		showTrafficLayer: function(newVal, oldVal){
 			if (newVal != oldVal){
 				if(newVal){
@@ -312,6 +419,19 @@ var app = window.app = new Vue({
 				}
 			}
 		},
+		setNight: function(newVal, oldVal){
+			if (newVal != oldVal){
+				if (newVal == 'OFF'){
+					this.nightMode = false;
+				}
+				else if (newVal == 'ON'){
+					this.nightMode = true;
+				}
+				/*else if (newVal == 'AUTO'){
+					this.setDate();
+				}*/
+			}
+		},
 		'placeInput.place': function(newVal, oldVal){
 			//console.log("PLACECHANGE");
 			if (newVal.name != oldVal.name){
@@ -319,6 +439,7 @@ var app = window.app = new Vue({
 					if (this.zoomV < 15){
 						this.zoomV = 15;
 					}
+					//console.log("centerV PLACECHANGE");
 					this.centerV = newVal.geometry.location;
 					this.placeInputOpen = true;
 				}
@@ -329,8 +450,45 @@ var app = window.app = new Vue({
 		currentRoute: function(){
 			var route = '';
 
+			if(this.orgCode != ''){
+				route += 'orgcode=' + this.orgCode;
+			}
+
+			// Views
+
 			if(this.radioValue != 'Both'){
-				route += this.radioValue.toLowerCase();
+				if( this.orgCode != ''){
+					route += '&';
+				}
+				route += 'view=' + this.radioValue.toLowerCase();
+			}
+			if(this.showGIS){
+				if( this.orgCode != '' || this.radioValue != 'Both'){
+					route += '&';
+				}
+				route += 'layers';
+			}
+			if(this.showVehicles){
+				if( this.orgCode != '' || this.radioValue != 'Both' || this.showGIS ){
+					route += '&';
+				}
+				route += 'vehicles';
+			}
+
+			// Options
+			
+			if(this.showTrafficLayer){
+				if( this.orgCode != '' || this.radioValue != 'Both' || this.showGIS || this.showVehicles ){
+					route += '&';
+				}
+				route += 'traffic';
+			}
+
+			if(this.setNight != 'OFF'){
+				if( this.orgCode != '' || this.radioValue != 'Both' || this.showGIS || this.showVehicles || this.showTrafficLayer ){
+					route += '&';
+				}
+				route += 'night=' + this.setNight.toLowerCase();
 			}
 			
 			return route;
@@ -350,6 +508,33 @@ var app = window.app = new Vue({
 				return 'Both';
 			}
 		},
+
+		mapOptions: function(){
+			if(!(this.nightMode)){
+				return{zoomControl: false, fullscreenControl: false, streetViewControl: true, gestureHandling: 'greedy', styles: null, tilt:0};
+			}
+			else{
+				return{zoomControl: false, fullscreenControl: false, streetViewControl:true, gestureHandling: 'greedy', styles: this.night, tilt:0};
+			}
+		},
+
+		panelsPollingMS: function(){
+			if (this.panelsPollingSec == 'OFF'){
+				return 'OFF';
+			}
+			else{
+				return this.panelsPollingSec * 1000;
+			}
+		},
+		vehiclesPollingMS: function(){
+			if (this.vehiclesPollingSec == 'OFF'){
+				return 'OFF';
+			}
+			else{
+				return this.vehiclesPollingSec * 1000;
+			}
+		},
+
 		
 		navTitle1: function(){
 			return this.data.Title[0]._NavbarTitle1;
@@ -362,7 +547,7 @@ var app = window.app = new Vue({
 		},
 		typePanel: function(){
 			//if(this.data.Title[0]._Type){
-				return this.data.Title[0]._Type;
+				return this.data.Title[0]._Type + 's';
 			/*}
 			else{
 				return 'Unknown';
@@ -386,10 +571,40 @@ var app = window.app = new Vue({
 				return !(!(vehicle.lat) || !(vehicle.lng));
 			});
 		},
-		
-		filterLayers_Legend: function(){
+
+		showCloseAll: function(){
+			// determine if more than 1 call open, show/hide close all button
+			var p = this.data.Panels.filter(function(panel){
+				return panel._isOpen;
+			});
+			var v = this.data2.Vehicles.filter(function(vehicle){
+				return vehicle.isOpen;
+			});
+			if(p && v){
+				return ((p.length + v.length) > 1);
+			}
+			else if(p){
+				return (p.length > 1);
+			}
+			else if(v){
+				return (v.length > 1);
+			}
+			else{
+				return false;
+			}
+		},
+
+
+		filterLayers_Active: function(){
 			return this.layers.filter(function(lyr){
-				return (lyr.filetype.toLowerCase() == 'mapservice' && lyr.active == true && lyr.legendshow.toLowerCase() == "true" && (lyr.legend.length > 0) );
+				return (lyr.active == true);
+			}).sort(function(a, b){
+				return a.toggleOrder - b.toggleOrder;
+			});
+		},
+		filterLayers_Legend: function(){
+			return this.filterLayers_Active.filter(function(lyr){
+				return (lyr.filetype.toLowerCase() == 'mapservice' && lyr.legendshow.toLowerCase() == "true" && (lyr.legend.length > 0) );
 			}).sort(function(a, b){
 				return a.toggleOrder - b.toggleOrder;
 			});
@@ -426,12 +641,18 @@ var app = window.app = new Vue({
 	},
 	methods:{
 		handleResize: function(event) {
+/* UPDATE FOR Google Maps V3.32 - CLarson 8/10/18 */
 			this.fullHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 			this.fullWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 		},
-		resizeMap: function(){
+/* UPDATE FOR Google Maps V3.32 - CLarson 8/10/18 */
+/*comment out		resizeMap: function(){
 			this.$broadcast('g-resize-map');
-		},	
+		},*/
+		mapIdling: function(){
+			//console.log("idling " + this.mapBounds.getSouthWest().lng() + ', ' + this.mapBounds.getNorthEast().lng());
+			//this.$broadcast('g-resize-map');
+		},
 		toggleFullScreen: function() {
 		
 			var doc = window.document;
@@ -475,7 +696,6 @@ var app = window.app = new Vue({
 				return panelTitle;
 			}
 		},
-
 		spanTitleSize: function (panelTitle) {
 			if (panelTitle.length > 25){
 				if(panelTitle.length > 50){
@@ -490,7 +710,26 @@ var app = window.app = new Vue({
 			}
 		},
 		
-		
+		filterLayersByFiletype: function(type){
+			var self = this;
+			return this.filterLayers_Active.filter(function(lyr){
+				return lyr.filetype.toLowerCase() == type && !(self.nightMode && lyr.urldark);
+			});
+		},
+		filterDarkLayersByFiletype: function(type){
+			var self = this;
+			return this.filterLayers_Active.filter(function(lyr){
+				return lyr.filetype.toLowerCase() == type && (self.nightMode && lyr.urldark);
+			});
+		},
+		filterLayersByGroup: function(group){
+			return this.layers.filter(function(lyr){
+				return lyr.groupid === group;
+			}).sort(function(a, b){
+				return a.grouporderinside - b.grouporderinside;
+			});
+		},
+
 		getLatLng: function(plat, plng){
 			return {lat: plat, lng: plng};
 		},
@@ -555,13 +794,6 @@ var app = window.app = new Vue({
 				return null;
 			}
 		},
-		getSearchIcon: function() {
-			return {
-				url: this.placeInput.place.icon,
-				scaledSize: new google.maps.Size(30,30),
-				labelOrigin: new google.maps.Point(15, 35)
-			};
-		},
 		getVehicleIcon: function(vehicle){
 			if (!(vehicle.isrecent)){
 				if(!(vehicle.isOpen)){
@@ -610,14 +842,54 @@ var app = window.app = new Vue({
 				return group - vehicle.order;
 			}
 		},
+
+		getSearchIcon: function() {
+			return {
+				url: this.placeInput.place.icon,
+				scaledSize: new google.maps.Size(30,30),
+				labelOrigin: new google.maps.Point(15, 35)
+			};
+		},
+		getSearchLabel: function(){
+			var vcolor = 'black';
+			if(this.nightMode){
+				vcolor = '#cccccc';
+			}
+			return {
+				text: this.placeInput.place.name,
+				fontFamily: 'Roboto, Arial, sans-serif',
+				fontSize: '12px',
+				fontWeight: '700',
+				color: vcolor
+			};
+		},
 		
 		/* EVENTS - CLICK */
 		clickCenterMap: function(){
-			this.centerV = this.centerDefault;
-			this.zoomV = 13;
+			if(app.centerV.lat != app.centerDefault.lat || app.centerV.lng != app.centerDefault.lng){
+				//console.log("centerV clickCenterMap");
+				app.centerV = app.centerDefault;
+			}
+			if(app.zoomV != 13){
+				//console.log("zoomV clickCenterMap");
+				app.zoomV = 13;
+			}
 			
 			return false;
 		},
+		clickCloseAll: function(){
+			this.data.Panels.forEach(function(panel){
+				panel._isOpen = false;
+			});
+			this.data2.Vehicles.forEach(function(vehicle){
+				vehicle.isOpen = false;
+			});
+			
+			this.countOpenIndex = 1600;
+			
+			return;
+		},
+
 		clickPanelMarker: function(panel, e){
 			var self = this;
 			
@@ -717,59 +989,116 @@ var app = window.app = new Vue({
 			return;
 		},
 		
-		
-		filterLayersByFiletype: function(type){
-			var self = this;
-			return this.layers.filter(function(lyr){
-				return lyr.filetype.toLowerCase() == type && lyr.active == true && !(self.nightMode && lyr.urldark);
-			});
+		addLayerToggleOrder: function(lyr){
+			var len;
+			var len2;
+			
+			lyr.isloading = true;
+			
+			len = this.layersToggleOrder.push(lyr.id);	// add layer's id to array, returns new array length
+			this.countActiveLayers++;
+			lyr.toggleOrder = len;	 // set layer toggle order (first will be 1)
+			
+			if(lyr.filetype.toLowerCase() == "mapservice" || lyr.filetype.toLowerCase() == "kml"){
+				lyr.active = true;
+			}
+			if(lyr.filetype.toLowerCase() == "tilecache"){		// || lyr.filetype.toLowerCase() == "wms"){
+				len2 = this.layersMapTypeOrder.push(lyr.id);		// [tilecache & wms] add layer's id to array, returns new array length
+				lyr.mapTypeIndex = len2 - 1;
+				lyr.active = true;
+				//console.log("addLayerToggleOrder " + lyr.id + ": toggleOrder " + lyr.toggleOrder + ", mapTypeIndex " + lyr.mapTypeIndex);
+			}
 		},
-		filterDarkLayersByFiletype: function(type){
+		removeLayerToggleOrder: function(lyr){
+			//console.log("removeLayerToggleOrder " + lyr.id + ": toggleOrder " + lyr.toggleOrder + ", mapTypeIndex " + lyr.mapTypeIndex);
 			var self = this;
-			return this.layers.filter(function(lyr){
-				return lyr.filetype.toLowerCase() == type && lyr.active == true && (self.nightMode && lyr.urldark);
-			});
-		},
-		filterLayersByGroup: function(group){
-			return this.layers.filter(function(lyr){
-				return lyr.groupid === group;
-			}).sort(function(a, b){
-				return a.grouporderinside - b.grouporderinside;
-			});
+			lyr.active = false;
+			var i = this.layersToggleOrder.indexOf(lyr.id);		// find layer's id in array (index start at 0)
+			var otherID;
+			var otherLyr;
+			if(i > -1){
+				this.layersToggleOrder.splice(i,1)		// remove layer's id from array
+				this.countActiveLayers--;
+				lyr.toggleOrder = 0;	// set layer's toggle order to 0
+				// for each remaining layer in array, find in app.layers, decrement their toggleOrder
+				for(i; i < this.layersToggleOrder.length; i++){
+					otherID = self.layersToggleOrder[i];
+					otherLyr = self.filterLayers_Active.find(function(oLayer){
+						return oLayer.id == otherID;
+					})
+					if(otherLyr){
+						otherLyr.toggleOrder--;
+					}
+				}
+				
+				if(lyr.filetype.toLowerCase() == "tilecache"){ 		//|| lyr.filetype.toLowerCase() == "wms"){
+					var i2 = this.layersMapTypeOrder.indexOf(lyr.id);		// [tilecache & wms] find layer's id in array (index start at 0)
+					if(i2 > -1){
+						this.layersMapTypeOrder.splice(i2,1)		// [tilecache & wms] remove layer's id from array
+						// [tilecache & wms] for each remaining layer in array, find in app.layers, decrement their toggleOrder
+						for(i2; i2 < this.layersMapTypeOrder.length; i2++){
+							otherID = self.layersMapTypeOrder[i2];
+							otherLyr = self.filterLayers_Active.find(function(oLayer){
+								return oLayer.id == otherID;
+							})
+							if(otherLyr){
+								otherLyr.mapTypeIndex--;
+							}
+						}
+					}
+					else{
+						console.log("layer mapTypeIndex not added");
+					}
+				}
+			}
+			else{
+				console.log("layer toggleOrder not added");
+			}
 		},
 		layerToggle: function(lyr){
 			// DECLARE VARIABLES
-			var self = this;
-			
-			if(lyr.active === false){
-				self.countActiveLayers++;
-				lyr.toggleOrder = self.countActiveLayers;
+			if(lyr.filetype.toLowerCase() == "mapservice" || lyr.filetype.toLowerCase() == "tilecache" || lyr.filetype.toLowerCase() == "kml"){
+				var self = this;
+				var len;
 				
-				if(lyr.filetype.toLowerCase() == "mapservice"){
-					lyr.active = true;
+				if(lyr.active === false){
+					/*self.countActiveLayers++;
+					lyr.toggleOrder = self.countActiveLayers;
+					
+					if(lyr.filetype.toLowerCase() == "mapservice"){
+						lyr.active = true;
+					}
+					if(lyr.filetype.toLowerCase() == "tilecache"){
+						lyr.active = true;
+					}
+					*/
+					this.addLayerToggleOrder(lyr);
+					
 				}
-				if(lyr.filetype.toLowerCase() == "tilecache"){
-					lyr.active = true;
+				else{
+					/*lyr.active = false;
+					self.countActiveLayers--;
+					lyr.toggleOrder = 0;
+					*/
+					this.removeLayerToggleOrder(lyr);
 				}
-				
-			}
-			else{
-				lyr.active = false;
-				self.countActiveLayers--;
-				lyr.toggleOrder = 0;
 			}
 			return;
 		},
+
 		loadGISLayers: function(){
 			// Uses vue-resource
 			// Get layer information from Google Spreadsheet
 			var self = this;
 			var lyr;
-			this.$http.get("https://spreadsheets.google.com/feeds/list/1q2t8kR4fme1D0Us2EZmsj3LjBQ2QxD0lfl2db68hF2Q/1/public/values?&alt=json&sq=label%3E%22%22%20and%20id%3C%3E%22ID%22").then(
-			function(response) {
+			//this.$http.get("https://spreadsheets.google.com/feeds/list/1q2t8kR4fme1D0Us2EZmsj3LjBQ2QxD0lfl2db68hF2Q/1/public/values?&alt=json&sq=label%3E%22%22%20and%20id%3C%3E%22ID%22").then(
+			$.post('https://query.cityoflewisville.com/v2/',{
+				webservice : 'Get Public GIS Layers'
+			},
+			function(data) {
 				//Success Callback
 				
-				self.layers = response.body.feed.entry.map(function(obj, i){
+				/*self.layers = response.body.feed.entry.map(function(obj, i){
 					lyr = {};
 					Object.keys(obj).forEach(function(x){
 						if(x.substr(0,4)=='gsx$' || x=='updated'){
@@ -781,6 +1110,23 @@ var app = window.app = new Vue({
 							}
 						}
 					});
+				*/
+
+				self.layers = data.layers.map(function(obj, i){
+					lyr = {};
+					Object.keys(obj).forEach(function(x){
+						if(x == 'infowindowcolumns'){
+							if(obj[x]){
+								lyr[x] = obj[x].split(",").map(function(obj){return obj.toLowerCase()});
+							}
+							else{
+								lyr[x] = obj[x];
+							}
+						}
+						else{
+							lyr[x] = obj[x];
+						}
+					});
 					
 					// Set other properties for each layer object
 					lyr.isloading = false;
@@ -789,32 +1135,121 @@ var app = window.app = new Vue({
 					lyr.legend = [];
 					
 					// Activate layers if open on load is true
-					if(lyr.openonload.toLowerCase() == "true"){
+					/*if(lyr.openonload.toLowerCase() == "true"){
 						lyr.active = true;
 					}
 					else{
 						lyr.active = false;
-					}
-					
-					// Don't show layers if marked in spreadsheet 
-					if(lyr.hidefromuser.toLowerCase() == "true" || lyr.avlonly.toLowerCase() == "true"){
-						lyr.hidden = true;
-					}
-					else{
-						lyr.hidden = false;
-					}
+					}*/
+
+					lyr.active = false;
 					
 					return lyr;
 				});
+				self.layers.forEach(function(lyr){
+					if(lyr.openonload){
+						self.addLayerToggleOrder(lyr);
+					}
+				});
+				
 				
 				//console.log(self.layers);
 				
-			}, function (response) {
+			})
+			.fail(function(data){
 				// error callback
 				alert("Error loading GIS Layers - no response from spreadsheet");
 			});
-		}
-		
+		},
+
+
+		pollingPanels: function(){
+			//console.log('polling panels')
+			var self = this;
+			if(self.orgCode != ''){
+				$.post('https://query.cityoflewisville.com/v2/',{
+					webservice : 'AVLTemplate',
+					OrgGroupCode: self.orgCode
+				},
+				function(data){
+					// initial data
+					if(app.data.Panels.length==0){
+						app.data = data;
+						app.initial1 = true;
+						
+						app.data.Panels.forEach(function(panel){
+							Vue.set(panel, '_isOpen', false);
+							Vue.set(panel, '_openIndex', 0);
+						});
+					}
+					
+					// added or changed data
+					else{
+						data.Panels.forEach(function(panel, index){
+							var oldPanel = app.data.Panels.find(function (p){
+								return p._ID == panel._ID;
+							});
+							if (!oldPanel){
+								// new panel
+								panel['_isOpen'] = false;
+								panel['_openIndex'] = 0;
+							}
+							else{
+								// panel existed
+								panel['_isOpen'] = oldPanel._isOpen;
+								panel['_openIndex'] = oldPanel._openIndex;
+							}
+						});
+							
+						app.data.Panels = data.Panels;
+					}
+						
+					app.panelsPolling = true;
+					setTimeout(app.pollingPanels, app.panelsPollingMS);
+				})
+				.fail(function(data){
+					console.log("panels polling failed");
+					app.panelsPolling = false;
+					setTimeout(app.pollingPanels, app.panelsPollingMS);
+				});
+			}
+		},
+		pollingVehicles: function(){
+			//console.log('polling vehicles')
+			var self = this;
+			if(self.orgCode != ''){
+				$.post('https://query.cityoflewisville.com/v2/',{
+					webservice : 'AVLTemplate/Vehicles',
+					OrgGroupCode: self.orgCode
+				},
+				function(data){
+					//console.log(response.data.Vehicles);		
+					data.Vehicles.forEach(function(vehicle, index){
+						var i = app.data2.Vehicles.findIndex(function (v){
+							return v.VehicleID == vehicle.VehicleID;
+						});
+						if (i == -1){
+							vehicle['isOpen'] = false;
+							vehicle['openIndex'] = 0;
+						}
+						else{
+							vehicle['isOpen'] = app.data2.Vehicles[i].isOpen;
+							vehicle['openIndex'] = app.data2.Vehicles[i].openIndex;
+						}
+					});
+					
+					app.data2.Vehicles = data.Vehicles;
+					app.initial2 = true;
+					app.vehiclesPolling = true;
+					setTimeout(app.pollingVehicles, app.vehiclesPollingMS);
+				})
+				.fail(function(data){
+					console.log("vehicles polling failed");
+					app.vehiclesPolling = false;
+					setTimeout(app.pollingVehicles, app.vehiclesPollingMS);
+				});
+			}
+		},
 	},
 	ready: function() {
 	
@@ -856,28 +1291,78 @@ var app = window.app = new Vue({
 			match = RegExp('orgcode=([^&]*)').exec(initialParams);
 			if ( match ){
 				console.log(match[1]);
-				openSocket(match[1]);
+				self.orgCode = match[1];
 			}
 			
 			// Views
-			match = RegExp('map').exec(initialParams);
-			if (match){
+			match = RegExp('view=([^&]*)').exec(initialParams);
+			if ( match && match[1] == 'map' ){
 				self.radioValue = 'Map';
 			}
-			match = RegExp('list').exec(initialParams);
-			if (match){
+			else if ( match && match[1] == 'list' ){
 				self.radioValue = 'List';
 			}
+
+			match = RegExp('layers').exec(initialParams);
+			if (match){
+				// check if user has incorrect params: either layers OR vehicles - cannot be both
+				match2 = RegExp('vehicles').exec(initialParams);
+				if (match2){
+					self.showVehicles = true;
+				}
+				else{
+					self.showGIS = true;
+				}
+			}
+			else{
+				match = RegExp('vehicles').exec(initialParams);
+				if (match){
+					self.showVehicles = true;
+				}
+			}
+
+			// Options
+			
+			match = RegExp('traffic').exec(initialParams);
+			if (match){
+				self.showTrafficLayer = true;
+			}
+			match = RegExp('night=([^&]*)').exec(initialParams);
+			if (match){
+				self.setNight = match[1].toUpperCase();
+			}
+		}
+
+		if(self.orgCode != ''){
+			self.pollingPanels();
+			self.pollingVehicles();
 		}
 		
-		
+
 		// Add watches after the initial set from URL parameters
+		// Wait, why not on the inital set??? - 4/27
 		
 		self.$watch('radioValue', function(newVal, oldVal){
-			self.$broadcast('g-resize-map');
+/* UPDATE FOR Google Maps V3.32 - CLarson 8/10/18 */
+			//console.log("radioValue");
+//comment out			self.$broadcast('g-resize-map');
+		})
+		self.$watch('showGIS', function(newVal, oldVal){
+			//console.log("showGIS");
+/* UPDATE FOR Google Maps V3.32 - CLarson 8/10/18 */
+//comment out			self.$broadcast('g-resize-map');
+			
+			if(newVal && self.showVehicles){
+				self.showVehicles = !(self.showVehicles);
+			}
 		})
 		self.$watch('showVehicles', function(newVal, oldVal){
-			self.$broadcast('g-resize-map');
+/* UPDATE FOR Google Maps V3.32 - CLarson 8/10/18 */
+			//console.log("showVehicles");
+//comment out			self.$broadcast('g-resize-map');
+			if(newVal && self.showGIS){
+				self.showGIS = !(self.showGIS);
+			}
 		})
 
 		
@@ -901,80 +1386,6 @@ var app = window.app = new Vue({
 	},
 });
 
-myData.on('initial data received', function(args){
-	console.log('initial');
-	console.log(args['initialData']);
-	app.initial1 = true;
-	app.data = args['initialData'];
-			
-	app.data.Panels.forEach(function(panel){
-		Vue.set(panel, '_isOpen', false);
-		Vue.set(panel, '_openIndex', 0);
-	});
-});
-
-myData2.on('initial data received', function(args){
-	app.initial2 = true;
-	app.data2 = args['initialData'];
-	app.data2.Vehicles.forEach(function(vehicle){
-		Vue.set(vehicle, 'isOpen', false);
-		Vue.set(vehicle, 'openIndex', 0);
-	});
-});
-
-myData.on('Panels data added', function(newData){
-	console.log('added');
-	
-    var newPanelIDs = newData.reduce(function(a, b){
-    	return a.concat(b['_ID']);
-    }, []);
-    app.data.Panels.forEach(function(panel, index){
-    	if (newPanelIDs.indexOf(panel._ID) > -1){
-    		Vue.set(panel, '_isOpen', false);
-			Vue.set(panel, '_openIndex', 0);
-    	}
-    });
-});
-
-myData2.on('Vehicles data added', function(newData){
-    var newVehicles = newData.reduce(function(a, b){
-    	return a.concat(b['modemid']);
-    }, []);
-    app.data2.Vehicles.forEach(function(vehicle, index){
-    	if (newVehicles.indexOf(vehicle.modemid) > -1){
-    		Vue.set(vehicle, 'isOpen', false);
-			Vue.set(vehicle, 'openIndex', 0);
-    	}
-    });
-}); 
-
-/* refresh data when socket issues arise; added by Brandon 2/23/17 */
-myData.on('primary key violation', function(){
-	console.log('Panels primary key violation');
-	myData.refreshData();
-})
-myData2.on('primary key violation', function(){
-	console.log('Vehicles primary key violation');
-	myData2.refreshData();
-})
-
-
-myData.socket.on('connect_error', function(){
-    app.connected1 = false;
-})
-
-myData2.socket.on('connect_error', function(){
-    app.connected2 = false;
-})
-
-myData.socket.on('connect', function(){
-    app.connected1 = true;
-})
-
-myData2.socket.on('connect', function(){
-    app.connected2 = true;
-})
-
 
 // When vue google maps loads, vueGoogleMapsInit is the callback
 // Add arcgis, then callback arcGISInit
@@ -997,7 +1408,7 @@ var vueGoogleMapsInit = function(){
 		};
 	}
 
-	script.src = 'scripts/arcgislink.js';
+	script.src = 'http://avl.cityoflewisville.com/scripts/arcgislink3.32_8-17.js';
 	document.body.appendChild( script );
 }
 	

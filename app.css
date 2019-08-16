@@ -34,13 +34,13 @@
 	width: 100%;
 }
 
+#layersList td.layerCell, #vehicleList a {
+	cursor: pointer;
+}
 .nav-city-logo, .loading-logo{
 	height: 50px !important;
 }
-.navbar-default a.navbar-brand .loading-logo{
-	margin-top: -15px !important;
-	margin-bottom: -15px !important;
-}
+
 /* Remove bullet from badge (right, in collapse) */
 .navbar-header{
 	list-style: none;
@@ -143,6 +143,82 @@ td.legendCell {
 }
 .controlBold{
 	font-weight: 500;
+}
+
+zoomWrapper{
+	background-color: rgb(255,255,255);
+	border-radius: 2px;
+	box-shadow: rgba(0,0,0,0.298039) 0px 1px 4px -1px;
+	cursor: pointer;
+	margin: 10px;
+	width: 32px;
+	height: 64px;
+}
+.zoomButton{
+	width: 32px;
+	height: 32px;
+	display: inline-block;
+	/*text-align:center;*/
+	color: rgb(25,25,25);
+	font-family: Roboto, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 32px;
+	vertical-align: middle;
+	text-align: center;
+	/*text-rendering: auto;*/
+	letter-spacing: normal;
+	word-spacing: normal;
+	text-indent:0px;
+	text-shadow: none;
+}
+.zoomButton:hover{	/*From app_new2.css*/
+	background-color: rgb(235,235,235);
+}
+.zoomButton:first-of-type{
+	border-bottom: 1px solid rgb(235,235,235);
+}
+.zoomButton:last-of-type{
+	border-top: 1px solid rgb(235,235,235);
+}
+/*.zoomButton.zoomInButton{
+	background-image:url("plus.png");
+}*/
+.zoomText{
+	color: rgb(25,25,25);
+	font-family: Roboto, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 32px;
+	vertical-align: middle;
+	text-align: center;
+	/*padding: 8px;*/
+}
+/*.zoomButton .glyphicon:after{
+	clear: both;
+}*/
+.zoomButton.darken{
+	background-color: rgb(235,235,235);
+}
+@media (hover:hover){
+	.controlUI:hover{
+		background-color: rgb(235,235,235);
+	}
+	.zoomButton:hover{
+		background-color: rgb(235,235,235);
+	}
+}
+@media (hover:none), (hover:on-demand){
+	.controlUI:hover{
+		background-color: rgb(255,255,255);
+	}
+	.zoomButton:hover{
+		background-color: rgb(255,255,255);
+	}
+	.controlUI:active{
+		background-color: rgb(235,235,235);
+	}
+	.zoomButton:active{
+		background-color: rgb(235,235,235);
+	}
 }
 
 /* Apply coloring for purple navbar */
@@ -303,17 +379,9 @@ td.legendCell {
 		overflow-y: auto;
 		border-right: 2px solid #4d1e76;
 	}
-	/*#rightSide{
-		height: calc(100vh - 51px);
-		overflow-y: auto;
-		border-left: 2px solid #4d1e76;
-	}*/
 	.hide-out-collapse{
 		display:none !important;
 	}
-	/*.navbar-right label{
-		padding-top: 10px !important;
-	}*/
 	div.pac-container{
 		z-index: 1031;
 	}
@@ -347,11 +415,8 @@ td.legendCell {
 
 /* set list height when stacked */
 @media only screen and (max-width:991px){
-	#rightSide{
+	#rightSide,#mapDiv{
 		height: calc(50vh - 25.5px);
-	}
-	#mapDiv{
-		height: calc(50vh - 27.5px);
 	}
 	#leftSide{
 		height: calc(50vh - 25.5px);
@@ -384,6 +449,7 @@ td.legendCell {
 		height: calc(100vh - 51px);
 		/*border-top: none;*/
 	}
+
 	
 	.fullRight #leftSide{
 		display: none;
@@ -476,6 +542,41 @@ td.legendCell {
 	}
 	.navbar-right .form-group:last-child {
 		margin-bottom: 0;
+	}
+}
+
+/* toughbook specifically  */
+
+@media only screen and (device-height: 768px) and (device-width: 1024px){
+	.landscape #leftSide.col-md-7 {
+    	width: 66.66666667%;
+  	}
+  	.landscape #rightSide.col-md-5 {
+  		width: 33.33333333%;
+  	}
+
+	.controlUI{
+		height: 34px;
+	}
+	.controlText{
+		line-height: 18px;
+		padding: 8px;
+	}
+
+  	.zoomWrapper{
+		width: 42px;
+		height: 84px;
+	}
+	.zoomButton{
+		width: 42px;
+		height: 42px;
+		font-size: 20px;
+		line-height: 42px;
+	}
+	.zoomText{
+		font-size: 20px;
+		line-height: 42px;
+		/*padding: 8px;*/
 	}
 }
 
