@@ -7,6 +7,18 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />	
     <title>Departmental AVL</title>
 
+	<!--Icons (in a folder named "icons")-->
+	<link rel="apple-touch-icon" sizes="57x57" href="icons/apple-touch-icon-57x57.png">
+	<link rel="apple-touch-icon" sizes="60x60" href="icons/apple-touch-icon-60x60.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="icons/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="76x76" href="icons/apple-touch-icon-76x76.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="icons/apple-touch-icon-114x114.png">
+	<link rel="apple-touch-icon" sizes="120x120" href="icons/apple-touch-icon-120x120.png">
+	<link rel="icon" type="image/png" href="icons/favicon-32x32.png" sizes="32x32">
+	<link rel="icon" type="image/png" href="icons/favicon-96x96.png" sizes="96x96">
+	<link rel="icon" type="image/png" href="icons/favicon-16x16.png" sizes="16x16">
+	<link rel="mask-icon" href="icons/safari-pinned-tab.svg" color="#5bbad5">
+	<link rel="shortcut icon" href="icons/favicon.ico">
 	<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700" rel="stylesheet">
 	
 	<!-- Bootstrap CSS -->
@@ -123,7 +135,7 @@
 		<div class="col-xs-12" v-bind:class="[{'col-sm-12': !(showGIS || showVehicles), 'col-sm-9': (showGIS || showVehicles), 'col-md-10': (showGIS || showVehicles), 'landscape': isLandscape, 'fullLeft': displayToggle=='List', 'fullRight': displayToggle=='Map'}]">
 			<div class="row">
 			
-				<div id="leftSide" class="col-md-6 col-lg-5" v-bind:class="[{
+				<div id="leftSide" class="col-md-6 col-lg-5" v-show="displayToggle != 'Map'" v-bind:class="[{
 					'fullScreen': displayToggle=='List', 'col-xs-6': isLandscape && displayToggle == 'Both'}]">
 					<div v-if="(!initial1)">
 						<img class="loading-logo center-block" alt="Loading..." src="http://avl.cityoflewisville.com/icons/loading.gif"/>
@@ -150,9 +162,9 @@
 					
 				</div>
 				
-				<div id="rightSide" class="col-md-6 col-lg-7" v-bind:class="[{
+				<div id="rightSide" class="col-md-6 col-lg-7" v-show="displayToggle != 'List'" v-bind:class="[{
 					'fullScreen': displayToggle=='Map', 'col-xs-6': isLandscape && displayToggle == 'Both'}]">
-					<div id="mapDiv" v-show="displayToggle != 'List'">
+					<div id="mapDiv">
 <!-- UPDATE FOR Google Maps V3.32 - CLarson 8/10/18 remove from map v-on:g-idle="resizeMap"-->
 						<map v-if="mapLoaded" :center.sync="centerV" :zoom.sync="zoomV" :bounds.sync="mapBounds" :options="mapOptions" v-on:g-idle="mapIdling" id="map" v-ref:map>
 							

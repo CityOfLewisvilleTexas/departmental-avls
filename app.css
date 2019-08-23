@@ -145,7 +145,7 @@ td.legendCell {
 	font-weight: 500;
 }
 
-zoomWrapper{
+.zoomWrapper{
 	background-color: rgb(255,255,255);
 	border-radius: 2px;
 	box-shadow: rgba(0,0,0,0.298039) 0px 1px 4px -1px;
@@ -421,21 +421,15 @@ zoomWrapper{
 	#leftSide{
 		height: calc(50vh - 25.5px);
 		overflow-y: auto;
-		border-top: none;
+		border-bottom: 2px solid #4d1e76;
 	}
-	#rightSide{
-		border-top: 2px solid #4d1e76;
-	}
-	
+
 	.landscape #rightSide, .landscape #mapDiv, .landscape #leftSide{
 		height: calc(100vh - 51px);
 	}
 	.landscape #leftSide{
 		border-right: 2px solid #4d1e76;
-		border-top: none;
-	}
-	.landscape #rightSide{
-		border-top: none;
+		border-bottom: none;
 	}
 	.landscape #leftSide.fullScreen{
 		border-right: none;
@@ -443,11 +437,10 @@ zoomWrapper{
 	
 	#rightSide.fullScreen, #rightSide.fullScreen #mapDiv{
 		height: calc(100vh - 51px);
-		border-top: none;
 	}
 	#leftSide.fullScreen{
 		height: calc(100vh - 51px);
-		/*border-top: none;*/
+		border-bottom: none;
 	}
 
 	
@@ -604,18 +597,6 @@ zoomWrapper{
 	/* placeInput is hidden on xs, have to hide the outer ul also */
 	.navbar-right{
 		display:none;
-	}
-	.narrative.landscape #narrativeFeed{
-		height: 100px;
-	}
-	.narrative.landscape.fullRight #leftSide{
-		height: 100px;
-	}
-	.narrative.landscape #mapDiv{
-		height: calc(100vh - 151px) !important;
-	}
-	.narrative.landscape #rightSide.fullScreen{
-		height: calc(100vh - 151px) !important;
 	}
 	/* Change coloring for min drop down */
 	.navbar-default .navbar-nav .open .dropdown-menu > li > a {
